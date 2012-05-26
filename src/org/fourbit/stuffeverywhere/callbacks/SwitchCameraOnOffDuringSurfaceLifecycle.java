@@ -1,18 +1,23 @@
 package org.fourbit.stuffeverywhere.callbacks;
 
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHolder.Callback {
 
     public interface Callback {
-        void onAfterCameraOn(Camera camera);
-        void onBeforeCameraOff(Camera camera);
+        void onAfterCameraOn(Camera camera, int cameraOrientationDegrees);
+        void onBeforeCameraOff(Camera camera, int cameraOrientationDegrees);
     }
+
+    private static final String TAG = SwitchCameraOnOffDuringSurfaceLifecycle.class.getName();
 
     private Callback mCallback;
     private Class<Camera> mClassCamera;
     private Camera mCamera;
+    private int mCameraOrientation;
 
     public SwitchCameraOnOffDuringSurfaceLifecycle(Class<Camera> class1, Callback callback) {
         this.mCallback = callback;
@@ -22,11 +27,26 @@ public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHol
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            mCamera = (Camera) mClassCamera.getDeclaredMethod("open").invoke(null, new Object[0]);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
+            int numberOfCameras = (Integer) mClassCamera.getDeclaredMethod("getNumberOfCameras")
+                    .invoke(null, new Object[0]);
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            for (int i = 0; i < numberOfCameras; i++) {
+                mClassCamera.getDeclaredMethod("getCameraInfo", int.class, Camera.CameraInfo.class)
+                        .invoke(null, i, info);
+                if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
+                    mCamera = (Camera) mClassCamera.getDeclaredMethod("open", int.class)
+                            .invoke(null, i);
+                    mCameraOrientation = info.orientation;
+
+                    mCallback.onAfterCameraOn(mCamera, mCameraOrientation);
+
+                    // Stop when first back-facing camera is found
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
-        mCallback.onAfterCameraOn(mCamera);
     }
 
     @Override
@@ -35,7 +55,7 @@ public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHol
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mCallback.onBeforeCameraOff(mCamera);
+        mCallback.onBeforeCameraOff(mCamera, mCameraOrientation);
         mCamera.release();
     }
 }

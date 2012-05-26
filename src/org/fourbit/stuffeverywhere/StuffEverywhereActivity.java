@@ -6,6 +6,7 @@ import org.fourbit.stuffeverywhere.callbacks.SwitchCameraOnOffDuringSurfaceLifec
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -22,8 +23,10 @@ public class StuffEverywhereActivity extends Activity {
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
         mSurfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
+        Display defaultDisplay = getWindowManager().getDefaultDisplay();
+
         mSurfaceView.getHolder().addCallback(
                 new SwitchCameraOnOffDuringSurfaceLifecycle(Camera.class,
-                        new OnPressedSurfaceToggleCameraPreview(mSurfaceView)));
+                        new OnPressedSurfaceToggleCameraPreview(mSurfaceView, defaultDisplay)));
     }
 }
