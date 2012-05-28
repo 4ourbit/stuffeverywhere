@@ -26,11 +26,14 @@ public final class OnPressedSurfaceToggleCameraPreview implements SwitchCameraOn
     private static final String TAG = OnPressedSurfaceToggleCameraPreview.class.getName();
     private final SurfaceView mSurfaceView;
     private Display mDisplay;
+    private Camera.PictureCallback mPictureCallback;
     private boolean isSurfacePressed;
 
-    public OnPressedSurfaceToggleCameraPreview(SurfaceView view, Display display) {
+    public OnPressedSurfaceToggleCameraPreview(SurfaceView view, Display display,
+            Camera.PictureCallback callback) {
         this.mSurfaceView = view;
         this.mDisplay = display;
+        this.mPictureCallback = callback;
         this.isSurfacePressed = false;
     }
 
@@ -83,8 +86,9 @@ public final class OnPressedSurfaceToggleCameraPreview implements SwitchCameraOn
             public boolean onTouch(View v, MotionEvent event) {
                 if (isSurfacePressed) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        camera.takePicture(null, null, null);
-                        camera.stopPreview();
+                        camera.takePicture(null, null, mPictureCallback);
+                        // Preview is stopped automatically when taking picture
+                        // camera.stopPreview();
                         isSurfacePressed = false;
                     }
                 }
