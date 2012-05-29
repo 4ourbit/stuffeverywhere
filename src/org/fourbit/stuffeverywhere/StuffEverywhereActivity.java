@@ -12,6 +12,7 @@ package org.fourbit.stuffeverywhere;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
 import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
 
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
         setContentView(R.layout.main);
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
+        mSurfaceView.setZOrderOnTop(true);
 
         final Camera.PictureCallback cameraPictureCallback = new Camera.PictureCallback() {
 
@@ -60,6 +62,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
         };
 
         mSurfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mSurfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mSurfaceView.getHolder().addCallback(
                 new OnSurfaceCreatedMakeCameraPreviewable(Camera.class,
                         new OnPreviewAvailableMakeViewCameraTrigger(mSurfaceView,
