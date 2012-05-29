@@ -9,58 +9,48 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere.callbacks;
 
-import java.io.IOException;
-
+import android.content.Context;
 import android.hardware.Camera;
-import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 
-public final class OnPressedSurfaceToggleCameraPreview implements SwitchCameraOnOffDuringSurfaceLifecycle.Callback {
+public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceCreatedMakeCameraPreviewable.Callback {
 
-    private static final String TAG = OnPressedSurfaceToggleCameraPreview.class.getName();
-    private final SurfaceView mSurfaceView;
-    private Display mDisplay;
     private Camera.PictureCallback mPictureCallback;
+    private View mView;
+
     private boolean isSurfacePressed;
 
-    public OnPressedSurfaceToggleCameraPreview(SurfaceView view, Display display,
-            Camera.PictureCallback callback) {
-        this.mSurfaceView = view;
-        this.mDisplay = display;
+    public OnPreviewAvailableMakeViewCameraTrigger(View view, Camera.PictureCallback callback) {
         this.mPictureCallback = callback;
+        this.mView = view;
         this.isSurfacePressed = false;
     }
 
     @Override
-    public void onAfterCameraOn(final Camera camera, final int orientation) {
-        try {
-            camera.setPreviewDisplay(mSurfaceView.getHolder());
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-            return; // TODO: Preview unsupported log msg
-        }
-
+    public void onPreviewAvailable(final Camera camera, final int orientation) {
         /**
          * Enable long press for the surface
          */
-        mSurfaceView.setOnLongClickListener(new OnLongClickListener() {
+        mView.setOnLongClickListener(new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
-                camera.setDisplayOrientation(getRelativeOrientation(orientation, mDisplay));
                 camera.startPreview();
+
+                camera.setDisplayOrientation(getRelativeOrientation(orientation));
                 isSurfacePressed = true;
                 return false;
             }
 
-            private int getRelativeOrientation(int currentOrientation, Display display) {
-                int rotation = display.getRotation();
+            private int getRelativeOrientation(int currentOrientation) {
+                WindowManager wm = (WindowManager) mView.getContext().getSystemService(
+                        Context.WINDOW_SERVICE);
+                int rotation = wm.getDefaultDisplay().getRotation();
                 int degrees = 0;
                 switch (rotation) {
                     case Surface.ROTATION_0:
@@ -80,15 +70,13 @@ public final class OnPressedSurfaceToggleCameraPreview implements SwitchCameraOn
             }
         });
 
-        mSurfaceView.setOnTouchListener(new OnTouchListener() {
+        mView.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (isSurfacePressed) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         camera.takePicture(null, null, mPictureCallback);
-                        // Preview is stopped automatically when taking picture
-                        // camera.stopPreview();
                         isSurfacePressed = false;
                     }
                 }
@@ -98,6 +86,6 @@ public final class OnPressedSurfaceToggleCameraPreview implements SwitchCameraOn
     }
 
     @Override
-    public void onBeforeCameraOff(final Camera camera, final int orientation) {
+    public void onBeforeCameraOff(Camera camera, int cameraOrientationDegrees) {
     }
 }

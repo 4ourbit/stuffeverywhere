@@ -14,21 +14,21 @@ import android.hardware.Camera.CameraInfo;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHolder.Callback {
+public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolder.Callback {
 
     public interface Callback {
-        void onAfterCameraOn(Camera camera, int cameraOrientationDegrees);
+        void onPreviewAvailable(Camera camera, int cameraOrientationDegrees);
         void onBeforeCameraOff(Camera camera, int cameraOrientationDegrees);
     }
 
-    private static final String TAG = SwitchCameraOnOffDuringSurfaceLifecycle.class.getName();
+    private static final String TAG = OnSurfaceCreatedMakeCameraPreviewable.class.getName();
 
     private Callback mCallback;
     private Class<Camera> mClassCamera;
     private Camera mCamera;
     private int mCameraOrientation;
 
-    public SwitchCameraOnOffDuringSurfaceLifecycle(Class<Camera> class1, Callback callback) {
+    public OnSurfaceCreatedMakeCameraPreviewable(Class<Camera> class1, Callback callback) {
         this.mCallback = callback;
         this.mClassCamera = class1;
     }
@@ -46,8 +46,9 @@ public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHol
                     mCamera = (Camera) mClassCamera.getDeclaredMethod("open", int.class)
                             .invoke(null, i);
                     mCameraOrientation = info.orientation;
-
-                    mCallback.onAfterCameraOn(mCamera, mCameraOrientation);
+                    
+                    mCamera.setPreviewDisplay(holder);
+                    mCallback.onPreviewAvailable(mCamera, mCameraOrientation);
 
                     // Stop when first back-facing camera is found
                     break;
@@ -65,6 +66,8 @@ public final class SwitchCameraOnOffDuringSurfaceLifecycle implements SurfaceHol
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         mCallback.onBeforeCameraOff(mCamera, mCameraOrientation);
+        // Preview is stopped automatically when taking picture but just to make sure
+        // camera.stopPreview();
         mCamera.release();
     }
 }

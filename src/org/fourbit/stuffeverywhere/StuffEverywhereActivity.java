@@ -9,8 +9,8 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere;
 
-import org.fourbit.stuffeverywhere.callbacks.OnPressedSurfaceToggleCameraPreview;
-import org.fourbit.stuffeverywhere.callbacks.SwitchCameraOnOffDuringSurfaceLifecycle;
+import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
+import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
 
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -47,7 +46,6 @@ public class StuffEverywhereActivity extends FragmentActivity {
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 
-        final Display defaultDisplay = getWindowManager().getDefaultDisplay();
         final Camera.PictureCallback cameraPictureCallback = new Camera.PictureCallback() {
 
             @Override
@@ -63,8 +61,8 @@ public class StuffEverywhereActivity extends FragmentActivity {
 
         mSurfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         mSurfaceView.getHolder().addCallback(
-                new SwitchCameraOnOffDuringSurfaceLifecycle(Camera.class,
-                        new OnPressedSurfaceToggleCameraPreview(mSurfaceView, defaultDisplay,
+                new OnSurfaceCreatedMakeCameraPreviewable(Camera.class,
+                        new OnPreviewAvailableMakeViewCameraTrigger(mSurfaceView,
                                 cameraPictureCallback)));
     }
 }
