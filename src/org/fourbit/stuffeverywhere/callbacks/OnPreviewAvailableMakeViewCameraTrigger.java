@@ -40,11 +40,11 @@ public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceC
 
             @Override
             public boolean onLongClick(View v) {
-                camera.startPreview();
+                isSurfacePressed = true;
 
                 camera.setDisplayOrientation(getRelativeOrientation(orientation));
-                isSurfacePressed = true;
-                return false;
+                camera.startPreview();
+                return true;
             }
 
             private int getRelativeOrientation(int currentOrientation) {
@@ -75,7 +75,8 @@ public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceC
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (isSurfacePressed) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getAction() == MotionEvent.ACTION_CANCEL
+                            || event.getAction() == MotionEvent.ACTION_UP) {
                         camera.takePicture(null, null, mPictureCallback);
                         isSurfacePressed = false;
                     }
