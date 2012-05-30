@@ -55,7 +55,8 @@ public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolde
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "Error while attaching camera to surface");
+            e.printStackTrace();
         }
     }
 
