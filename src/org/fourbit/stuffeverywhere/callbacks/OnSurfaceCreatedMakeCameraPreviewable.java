@@ -67,8 +67,10 @@ public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolde
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         mCallback.onBeforeCameraOff(mCamera, mCameraOrientation);
+        // Is this really needed when there is no such callback used?
+        mCamera.setPreviewCallback(null);
         // Preview is stopped automatically when taking picture but just to make sure
-        // camera.stopPreview();
+        mCamera.stopPreview();
         mCamera.release();
     }
 }
