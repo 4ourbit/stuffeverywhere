@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere;
 
+import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableFitViewSize;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
 import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
 
@@ -65,6 +66,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
         mSurfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mSurfaceView.getHolder().addCallback(
                 new OnSurfaceCreatedMakeCameraPreviewable(Camera.class,
+                        new OnPreviewAvailableFitViewSize(mSurfaceView),
                         new OnPreviewAvailableMakeViewCameraTrigger(mSurfaceView,
                                 cameraPictureCallback)));
     }

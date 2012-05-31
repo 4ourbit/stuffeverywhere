@@ -23,13 +23,13 @@ public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolde
 
     private static final String TAG = OnSurfaceCreatedMakeCameraPreviewable.class.getName();
 
-    private Callback mCallback;
+    private Callback[] mCallbacks;
     private Class<Camera> mClassCamera;
     private Camera mCamera;
     private int mCameraOrientation;
 
-    public OnSurfaceCreatedMakeCameraPreviewable(Class<Camera> class1, Callback callback) {
-        this.mCallback = callback;
+    public OnSurfaceCreatedMakeCameraPreviewable(Class<Camera> class1, Callback... callbacks) {
+        this.mCallbacks = callbacks;
         this.mClassCamera = class1;
     }
 
@@ -48,7 +48,8 @@ public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolde
                     mCameraOrientation = info.orientation;
                     
                     mCamera.setPreviewDisplay(holder);
-                    mCallback.onPreviewAvailable(mCamera, mCameraOrientation);
+                    for (Callback cb : mCallbacks)
+                        cb.onPreviewAvailable(mCamera, mCameraOrientation);
 
                     // Stop when first back-facing camera is found
                     break;
@@ -66,7 +67,8 @@ public final class OnSurfaceCreatedMakeCameraPreviewable implements SurfaceHolde
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mCallback.onBeforeCameraOff(mCamera, mCameraOrientation);
+        for (Callback cb : mCallbacks)
+            cb.onBeforeCameraOff(mCamera, mCameraOrientation);
         // Is this really needed when there is no such callback used?
         mCamera.setPreviewCallback(null);
         // Preview is stopped automatically when taking picture but just to make sure
