@@ -10,6 +10,7 @@
 package org.fourbit.stuffeverywhere;
 
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableFitViewSize;
+import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableIfStartedHideView;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
 import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
 
@@ -25,6 +26,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class StuffEverywhereActivity extends FragmentActivity {
 
@@ -39,6 +41,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
     }
 
     SurfaceView mSurfaceView;
+    TextView mTextViewHint;
 
     /** Called when the activity is first created. */
     @Override
@@ -47,7 +50,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
         setContentView(R.layout.main);
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
-        mSurfaceView.setZOrderOnTop(true);
+        mTextViewHint = (TextView) findViewById(R.id.textView1);
 
         final Camera.PictureCallback cameraPictureCallback = new Camera.PictureCallback() {
 
@@ -66,6 +69,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
         mSurfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mSurfaceView.getHolder().addCallback(
                 new OnSurfaceCreatedMakeCameraPreviewable(Camera.class,
+                        new OnPreviewAvailableIfStartedHideView(mTextViewHint),
                         new OnPreviewAvailableFitViewSize(mSurfaceView),
                         new OnPreviewAvailableMakeViewCameraTrigger(mSurfaceView,
                                 cameraPictureCallback)));
