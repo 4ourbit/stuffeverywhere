@@ -14,8 +14,6 @@ import android.hardware.Camera;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 
 public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceCreatedMakeCameraPreviewable.Callback {
@@ -36,7 +34,7 @@ public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceC
         /**
          * Enable long press for the surface
          */
-        mView.setOnLongClickListener(new OnLongClickListener() {
+        mView.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
@@ -70,7 +68,7 @@ public final class OnPreviewAvailableMakeViewCameraTrigger implements OnSurfaceC
             }
         });
 
-        mView.setOnTouchListener(new OnTouchListener() {
+        mView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
