@@ -30,6 +30,7 @@
         android:completionThreshold="1"
         android:ems="10"
         android:hint="Create or look for tags" >
+        <requestFocus />
     </AutoCompleteTextView>
 
 </LinearLayout>
