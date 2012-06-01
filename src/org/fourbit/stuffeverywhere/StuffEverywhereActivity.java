@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere;
 
+import org.fourbit.stuffeverywhere.callbacks.OnEnterMoveTextToTagCloud;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableFitViewSize;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableIfStartedHideView;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
@@ -28,11 +29,15 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 public class StuffEverywhereActivity extends FragmentActivity {
 
     public static class TagsFragment extends Fragment {
+
+        AutoCompleteTextView mAutoCompleteTextView;
+        ViewGroup mTagCloud;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +49,12 @@ public class StuffEverywhereActivity extends FragmentActivity {
             // imm.showSoftInput(mExplicitTextView, InputMethodManager.SHOW_IMPLICIT);
 
             View view = inflater.inflate(R.layout.tags_fragment, container, false);
+            mTagCloud = (ViewGroup) view.findViewById(R.id.tagCloud);
+            mAutoCompleteTextView = (AutoCompleteTextView) view
+                    .findViewById(R.id.autoCompleteTextView1);
+
+            mAutoCompleteTextView.setOnKeyListener(
+                    new OnEnterMoveTextToTagCloud(mAutoCompleteTextView, mTagCloud));
             return view;
         }
     }
