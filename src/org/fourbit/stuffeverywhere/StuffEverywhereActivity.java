@@ -42,6 +42,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
 
     SurfaceView mSurfaceView;
     TextView mTextViewHint;
+    byte[] currentImageData;
 
     /** Called when the activity is first created. */
     @Override
@@ -56,12 +57,16 @@ public class StuffEverywhereActivity extends FragmentActivity {
 
             @Override
             public void onPictureTaken(byte[] imageData, Camera camera) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-                        .replace(R.id.bottom_frame, new TagsFragment())
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .addToBackStack(null);
-                fragmentTransaction.commit();
+                /** Show tags fragment if nothing is captured */
+                if (currentImageData == null) {
+                    currentImageData = imageData;
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+                            .replace(R.id.bottom_frame, new TagsFragment())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
             }
         };
 
