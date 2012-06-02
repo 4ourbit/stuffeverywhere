@@ -32,9 +32,11 @@ public class OnEnterMoveTextToTagCloud implements TextView.OnEditorActionListene
     }
 
     private View createCloudEntry(Context context, CharSequence charSequence) {
+        // TODO Qualify style, like android.R.layout.select_dialog_item
         TextView entry = new TextView(context);
         entry.setText(charSequence);
         entry.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+        entry.setTextColor(context.getResources().getColor(android.R.color.primary_text_dark));
         return entry;
     }
 }
