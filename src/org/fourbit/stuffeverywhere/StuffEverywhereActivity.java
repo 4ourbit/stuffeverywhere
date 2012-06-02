@@ -53,7 +53,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
             mAutoCompleteTextView = (AutoCompleteTextView) view
                     .findViewById(R.id.autoCompleteTextView1);
 
-            mAutoCompleteTextView.setOnKeyListener(
+            mAutoCompleteTextView.setOnEditorActionListener(
                     new OnEnterMoveTextToTagCloud(mAutoCompleteTextView, mTagCloud));
             return view;
         }

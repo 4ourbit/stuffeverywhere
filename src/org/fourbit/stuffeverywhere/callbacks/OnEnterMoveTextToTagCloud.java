@@ -10,38 +10,30 @@
 package org.fourbit.stuffeverywhere.callbacks;
 
 import android.content.Context;
-import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class OnEnterMoveTextToTagCloud implements OnKeyListener {
+public class OnEnterMoveTextToTagCloud implements TextView.OnEditorActionListener {
 
-    EditText mEditText;
     ViewGroup mTagCloud;
 
     public OnEnterMoveTextToTagCloud(EditText textView, ViewGroup tagCloud) {
-        mEditText = textView;
         mTagCloud = tagCloud;
     }
 
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-            TextView entry = createCloudEntry(mTagCloud.getContext(), mEditText.getText());
-
-            mTagCloud.addView(entry);
-            mEditText.setText("");
-            return false;
-        }
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        mTagCloud.addView(createCloudEntry(mTagCloud.getContext(), v.getText()));
+        v.setText("");
         return false;
     }
 
-    private TextView createCloudEntry(Context context, Editable text) {
+    private View createCloudEntry(Context context, CharSequence charSequence) {
         TextView entry = new TextView(context);
-        entry.setText(text);
+        entry.setText(charSequence);
         entry.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         return entry;
     }

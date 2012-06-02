@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-
-    <org.fourbit.stuffeverywhere.layouts.FlowLayout
+    <org.fourbit.stuffeverywhere.layouts.FlowLayout
         android:id="@+id/tagCloud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -27,11 +26,13 @@
         android:id="@+id/autoCompleteTextView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:completionHint="Create or look for tags"
         android:completionThreshold="1"
         android:ems="10"
         android:hint="Create or look for tags" >
-        <requestFocus />
+
+        <requestFocus />
     </AutoCompleteTextView>
 
 </LinearLayout>
