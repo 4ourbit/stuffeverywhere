@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <org.fourbit.stuffeverywhere.layouts.FlowLayout
         android:id="@+id/tagCloud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
+    </org.fourbit.stuffeverywhere.layouts.FlowLayout>
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteTextView1"
