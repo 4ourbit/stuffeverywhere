@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/org.fourbit.stuffeverywhere"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-    <org.fourbit.stuffeverywhere.layouts.FlowLayout
-        android:id="@+id/tagCloud"
+    <com.devsmart.android.ui.HorizontalListView
+        android:id="@+id/horizontal_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:horizontalSpacing="10dp"
-        app:verticalSpacing="5dp" />
+        android:layout_height="wrap_content" />
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteTextView1"
