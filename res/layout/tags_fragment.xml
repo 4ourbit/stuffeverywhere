@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-    <org.fourbit.stuffeverywhere.layouts.FlowLayout
+    <LinearLayout
         android:id="@+id/tagCloud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
