@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.fourbit.stuffeverywhere.callbacks.OnEnterMoveTextToTagCloud;
@@ -18,6 +17,7 @@ import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableIfStartedHideView
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
 import org.fourbit.stuffeverywhere.callbacks.OnTagAddedUpdateView;
 import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
+import org.fourbit.stuffeverywhere.model.MalformedStuffTagException;
 import org.fourbit.stuffeverywhere.model.StuffTag;
 
 import android.content.Context;
@@ -63,9 +63,7 @@ public class StuffEverywhereActivity extends FragmentActivity {
                 mTagCloud.add(StuffTag.fromText("all"));
                 mTagCloud.add(StuffTag.fromText("your"));
                 mTagCloud.add(StuffTag.fromText("bases"));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            } catch (MalformedStuffTagException e) {}
 
             View view = inflater.inflate(R.layout.tags_fragment, container, false);
             mHorizontalListView = (HorizontalListView) view.findViewById(R.id.horizontalListView);

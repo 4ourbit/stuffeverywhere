@@ -9,13 +9,14 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere.callbacks;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
+import org.fourbit.stuffeverywhere.model.MalformedStuffTagException;
 import org.fourbit.stuffeverywhere.model.StuffTag;
 
 import android.view.KeyEvent;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class OnEnterMoveTextToTagCloud implements TextView.OnEditorActionListener {
 
@@ -42,9 +43,8 @@ public class OnEnterMoveTextToTagCloud implements TextView.OnEditorActionListene
             v.setText("");
             
             mCallback.onStuffTagAdded();
-        } catch (ParseException e) {
-            // TODO e.g. return toast message: invalid tag
-            e.printStackTrace();
+        } catch (MalformedStuffTagException e) {
+            Toast.makeText(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         return false;
