@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-    <LinearLayout
-        android:id="@+id/tagCloud"
+    <com.devsmart.android.ui.HorizontalListView
+        android:id="@+id/horizontalListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

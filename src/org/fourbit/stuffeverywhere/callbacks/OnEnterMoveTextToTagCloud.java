@@ -9,32 +9,44 @@
  *******************************************************************************/
 package org.fourbit.stuffeverywhere.callbacks;
 
-import android.content.Context;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import org.fourbit.stuffeverywhere.model.StuffTag;
+
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class OnEnterMoveTextToTagCloud implements TextView.OnEditorActionListener {
 
-    ViewGroup mTagCloud;
+    interface Callback {
+        public void onStuffTagAdded();
+    }
 
-    public OnEnterMoveTextToTagCloud(EditText textView, ViewGroup tagCloud) {
-        mTagCloud = tagCloud;
+    ArrayList<StuffTag> mStuffTagCloud;
+    Callback mCallback;
+
+    public OnEnterMoveTextToTagCloud(ArrayList<StuffTag> stuffTagCloud, Callback callback) {
+        mStuffTagCloud = stuffTagCloud;
+        mCallback = callback;
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        mTagCloud.addView(createCloudEntry(mTagCloud.getContext(), v.getText()));
-        v.setText("");
-        return false;
-    }
+        StuffTag stuffTag;
+        try {
+            stuffTag = StuffTag.fromText(v.getText());
+            mStuffTagCloud.add(stuffTag);
 
-    private View createCloudEntry(Context context, CharSequence charSequence) {
-        TextView entry = new TextView(context);
-        entry.setText(charSequence);
-        entry.setTextAppearance(context, android.R.style.TextAppearance_Medium);
-        return entry;
+            /** reset input box on enter */
+            v.setText("");
+            
+            mCallback.onStuffTagAdded();
+        } catch (ParseException e) {
+            // TODO e.g. return toast message: invalid tag
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
