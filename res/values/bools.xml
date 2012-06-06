@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Turn off when app is deployed. -->
+    <bool name="is_in_developer_mode">false</bool>
+
+</resources>
