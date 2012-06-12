@@ -15,12 +15,13 @@ import org.fourbit.stuffeverywhere.callbacks.OnEnterMoveTextToTagCloud;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableFitViewSize;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableIfStartedHideView;
 import org.fourbit.stuffeverywhere.callbacks.OnPreviewAvailableMakeViewCameraTrigger;
-import org.fourbit.stuffeverywhere.callbacks.OnTagAddedUpdateView;
 import org.fourbit.stuffeverywhere.callbacks.OnSurfaceCreatedMakeCameraPreviewable;
+import org.fourbit.stuffeverywhere.callbacks.OnTagAddedUpdateView;
 import org.fourbit.stuffeverywhere.model.MalformedStuffTagException;
 import org.fourbit.stuffeverywhere.model.StuffTag;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -83,6 +86,8 @@ public class StuffEverywhereActivity extends FragmentActivity {
         }
     }
 
+    private static final String INSTANCE_STATE_PICTURE = "instance_state_picture";
+
     SurfaceView mSurfaceView;
     TextView mTextViewHint;
     byte[] currentImageData;
@@ -121,5 +126,42 @@ public class StuffEverywhereActivity extends FragmentActivity {
                         new OnPreviewAvailableFitViewSize(mSurfaceView),
                         new OnPreviewAvailableMakeViewCameraTrigger(mSurfaceView,
                                 cameraPictureCallback)));
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putByteArray(StuffEverywhereActivity.INSTANCE_STATE_PICTURE, currentImageData);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentImageData = savedInstanceState.getByteArray(StuffEverywhereActivity.INSTANCE_STATE_PICTURE);
+    }
+    
+    
+
 }
