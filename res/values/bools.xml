@@ -2,6 +2,6 @@
 <resources>
 
     <!-- Turn off when app is deployed. -->
-    <bool name="is_in_developer_mode">false</bool>
+    <bool name="is_in_developer_mode">true</bool>
 
 </resources>
